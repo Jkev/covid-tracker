@@ -1,0 +1,23 @@
+body {
+    margin: 0;
+}
+
+.nav {
+    background-color: blue;
+    height: 50px;
+}
+
+#map {
+    height: 100%;
+    width: 100%;
+}
+
+.map-info {
+    background-color: brown;
+    height: 400px;
+}
+
+.data-info {
+    background-color: cadetblue;
+    height: 700px;
+}
