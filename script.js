@@ -2,6 +2,7 @@
 window.onload = () => {
 
     getCountryData();
+    getHistoricalData();
 }
 
 //funcion para inicializar google maps
@@ -11,22 +12,97 @@ let infoWindow;
 function initMap() {
   map = new google.maps.Map(document.getElementById("map"), {
     center: {
-      lat: -34.397,
-      lng: 150.644
+      lat: 19.432608,
+      lng: -99.133209
     },
-    zoom: 8
+    zoom: 3,
+    styles: mapStyle
   });
   infoWindow = new google.maps.InfoWindow();
 }
 //funcion para obtener la data de la api
 const getCountryData = () => {
-    fetch("https://corona.lmao.ninja/v2/countries")
+    fetch("https://corona.lmao.ninja/v2/historical/all?lastdays=120")
     .then((response)=>{
         return response.json()
     }).then((data)=>{
         showDataOnMap(data);
+        showDataInTable(data);
     })
 }
+
+const getHistoricalData = () => {
+    fetch("https://disease.sh/v3/covid-19/historical/all?lastdays=30")
+    .then((response)=>{
+        return response.json()
+    }).then((data)=>{
+       let chartData = buildChartData(data);
+       buildChart(chartData);
+    })
+}
+
+const buildChartData = (data) => {
+    let chartData = [];
+
+    for(let date in data.cases){
+        let newDataPoint = {
+            x: date,
+            y: data.cases[date]
+        }
+        chartData.push(newDataPoint);
+    }
+    return chartData;
+}
+
+
+const buildChart = (chartData) => {
+    var timeFormat = 'MM/DD/YY';
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var chart = new Chart(ctx, {
+        // The type of chart we want to create
+        type: 'line',
+
+        // The data for our dataset
+        data: {
+            datasets: [{
+                label: 'Total Cases',
+                backgroundColor: '#1d2c4d',
+                borderColor: '#1d2c4d',
+                data: chartData
+            }]
+        },
+
+    // Configuration options go here
+    options: {
+        tooltips: {
+            mode: 'index',
+            intersect: false
+        },
+
+        scales:   {
+            xAxes: [{
+                type:    "time",
+                time:    {
+                    format: timeFormat,
+                    tooltipFormat: 'll'
+                },
+                scaleLabel: {
+                    display:  true,
+                    labelString: 'value'
+                }
+            }],
+            yAxes: [{
+                ticks: {
+                    callback: function(value, index, values) {
+                        return numeral(value).format('0,0');
+                    }
+                }
+            }]
+        }
+    }
+});
+}
+
 
 const showDataOnMap = (data) => {
     data.map((country)=>{
@@ -48,20 +124,20 @@ const showDataOnMap = (data) => {
 
           var html = `
           <div class="info-container">
-            <div class="info-flag">
-                <img src="${country.countryInfo.flag}"
+            <div class="info-flag" style="background-image: url(${country.countryInfo.flag})">
+                
             </div>
             <div class="info-name">
                 ${country.country}
             </div>
             <div class="info-confirmed">
-                ${country.cases}
+               Total: ${country.cases}
             </div>
             <div class="info-recovered">
-                ${country.recovered}
+               Recovered: ${country.recovered}
             </div>
             <div class="info-deaths">
-                ${country.deaths}
+               Deaths: ${country.deaths}
             </div>
           </div>
           `
@@ -85,3 +161,17 @@ const showDataOnMap = (data) => {
     
 }
 
+const showDataInTable = (data) => {
+    var html = '';
+    data.forEach((country)=>{
+        html += `
+        <tr>
+            <td>${country.country}</td>
+            <td>${country.cases}</td>
+            <td>${country.recovered}</td>
+            <td>${country.deaths}</td>
+        </tr>
+        `
+    })
+    document.getElementById('table-data').innerHTML = html;
+}
