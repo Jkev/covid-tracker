@@ -87,7 +87,8 @@ const buildPieChart = (data) => {
             ]
         },
         options: {
-            responsive: true
+            responsive: true,
+            maintainAspectRatio: false,
         }
     });
 }
