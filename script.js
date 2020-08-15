@@ -3,6 +3,8 @@ window.onload = () => {
 
     getCountryData();
     getHistoricalData();
+    
+    getWortldCoronaData();
 }
 
 //funcion para inicializar google maps
@@ -12,8 +14,8 @@ let infoWindow;
 function initMap() {
   map = new google.maps.Map(document.getElementById("map"), {
     center: {
-      lat: 19.432608,
-      lng: -99.133209
+        lat: 34.80746,
+        lng: -40.4796
     },
     zoom: 3,
     styles: mapStyle
@@ -22,12 +24,21 @@ function initMap() {
 }
 //funcion para obtener la data de la api
 const getCountryData = () => {
-    fetch("https://corona.lmao.ninja/v2/historical/all?lastdays=120")
+    fetch("https://corona.lmao.ninja/v2/countries")
     .then((response)=>{
         return response.json()
     }).then((data)=>{
         showDataOnMap(data);
         showDataInTable(data);
+    })
+}
+
+const getWortldCoronaData = () => {
+    fetch("https://disease.sh/v2/all")
+    .then((response)=>{
+        return response.json()
+    }).then((data)=>{
+        buildPieChart(data);
     })
 }
 
@@ -54,6 +65,33 @@ const buildChartData = (data) => {
     return chartData;
 }
 
+const buildPieChart = (data) => {
+    var ctx = document.getElementById('myPieChart').getContext('2d');
+    var myPieChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            datasets: [{
+                data: [data.active, data.recovered, data.deaths],
+            backgroundColor: [
+                '#9d80fe',
+                '#7dd71d',
+                '#fb4443'
+            ]
+            }],
+        
+            // These labels appear in the legend and in the tooltips when hovering different arcs
+            labels: [
+                'Active',
+                'Reacovered',
+                'Deaths'
+            ]
+        },
+        options: {
+            responsive: true
+        }
+    });
+}
+
 
 const buildChart = (chartData) => {
     var timeFormat = 'MM/DD/YY';
@@ -74,6 +112,7 @@ const buildChart = (chartData) => {
 
     // Configuration options go here
     options: {
+        maintainAspectRatio: false,
         tooltips: {
             mode: 'index',
             intersect: false
@@ -86,10 +125,6 @@ const buildChart = (chartData) => {
                     format: timeFormat,
                     tooltipFormat: 'll'
                 },
-                scaleLabel: {
-                    display:  true,
-                    labelString: 'value'
-                }
             }],
             yAxes: [{
                 ticks: {
