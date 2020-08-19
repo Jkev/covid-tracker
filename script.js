@@ -5,6 +5,8 @@ window.onload = () => {
     getHistoricalData();
     getWortldCoronaData();
     
+;
+    
 }
 
 //funcion para inicializar google maps
@@ -12,19 +14,26 @@ let map;
 let infoWindow;
 let coronaGlobalData;
 let mapCircles = [];
+const worldwideSelection = {
+    name: 'Mundial',
+    value: 'www',
+    selected: true
+}
 var casesTypeColors = {
     cases: '#1d2c4d',
     active: '#9d80fe',
     recovered: '#7dd71d',
     deaths: '#fb4443'
 }
+
+const mapCenter = {
+    lat: 34.80746,
+    lng: -40.4796
+}
   
 function initMap() {
   map = new google.maps.Map(document.getElementById("map"), {
-    center: {
-        lat: 34.80746,
-        lng: -40.4796
-    },
+    center: mapCenter,
     zoom: 3,
     styles: mapStyle
   });
@@ -42,6 +51,39 @@ const clearTheMap = () => {
     }
 }
 
+const setMapCenter = (lat, long, zoom) => {
+    map.setZoom(zoom);
+    map.panTo({
+        lat: lat,
+        lng: long
+    });
+}
+
+const initDropdown = (searchList) => {
+    $('.ui.dropdown').dropdown({
+        values: searchList,
+        onChange: function(value, text){
+            if(value !== worldwideSelection.value){
+                getCountryDataSearch(value);
+            }else{
+                getWortldCoronaData();
+            }
+        }
+    });
+}
+
+const setSearchList = (data) => {
+    let searchList = [];
+    searchList.push(worldwideSelection);
+    data.forEach((countryData)=>{
+        searchList.push({
+            name: countryData.country,
+            value: countryData.countryInfo.iso3
+        })
+    })
+    initDropdown(searchList);
+}
+
 //funcion para obtener la data de la api
 const getCountryData = () => {
     fetch("https://corona.lmao.ninja/v2/countries")
@@ -49,8 +91,19 @@ const getCountryData = () => {
         return response.json()
     }).then((data)=>{
         coronaGlobalData = data;
+        setSearchList(data);
         showDataOnMap(data);
         showDataInTable(data);
+    })
+}
+const getCountryDataSearch = (countryIso) => {
+    const url = "https://disease.sh/v3/covid-19/countries/" + countryIso;
+    fetch(url)
+    .then((response)=>{
+        return response.json()
+    }).then((data)=>{
+        setMapCenter(data.countryInfo.lat, data.countryInfo.long, 3);
+        setStatsData(data);
     })
 }
 
@@ -61,6 +114,7 @@ const getWortldCoronaData = () => {
     }).then((data)=>{
         // buildPieChart(data);
         setStatsData(data);
+        setMapCenter(mapCenter.lat, mapCenter.lng, 2);
     })
 }
 
@@ -154,9 +208,7 @@ const showDataInTable = (data) => {
         html += `
         <tr>
             <td>${country.country}</td>
-            <td>${country.cases}</td>
-            <td>${country.recovered}</td>
-            <td>${country.deaths}</td>
+            <td>${numeral(country.cases).format('0,0')}</td>
         </tr>
         `
     })

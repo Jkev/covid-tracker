@@ -27,7 +27,6 @@ body {
 }
 
 .chart-container {
-    height: 300px;
     margin-left: 0;
     margin-right: 0;
 }
@@ -55,6 +54,7 @@ body {
     background-color: white;
     border-radius: 12px;
     box-shadow: 0 0 8px -4px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
 }
 
 .stats-container .card-body {
@@ -74,6 +74,7 @@ body {
     border-bottom-left-radius: 30px;
     border-top-left-radius: 30px;
     box-shadow: 0 0 8px -4px rgba(0, 0, 0, 0.5);
+    padding-top: 15px;
 }
 
 .total-number {
@@ -91,4 +92,34 @@ body {
 .stats-container .card-title {
     color: #695d5c;
     font-weight: 400;
+}
+
+.cases-table-container h4, .chart-container h4 {
+    color: #6A5D5D;
+    font-weight: 400;
+}
+
+.country-data .table td {
+    padding: 0.5rem;
+    border: none;
+}
+
+.tab-selection {
+    height: 10px;
+    background-color: #cc1034;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+}
+
+.cases .tab-selection {
+    background-color: #cc1034;
+}
+
+.recovered .tab-selection {
+    background-color: #7fd922;
+}
+.deaths .tab-selection {
+    background-color: #FA5575;
 }

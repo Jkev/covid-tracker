@@ -50,8 +50,8 @@ const buildChart = (chartData) => {
         data: {
             datasets: [{
                 label: 'Total Cases',
-                backgroundColor: '#1d2c4d',
-                borderColor: '#1d2c4d',
+                backgroundColor: 'rgba(204, 16, 52, 0.5)',
+                borderColor: '#CC1034',
                 data: chartData
             }]
         },
@@ -75,7 +75,7 @@ const buildChart = (chartData) => {
             yAxes: [{
                 ticks: {
                     callback: function(value, index, values) {
-                        return numeral(value).format('0,0');
+                        return numeral(value).format('0a');
                     }
                 }
             }]
