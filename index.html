@@ -18,18 +18,18 @@
     <script src="charts.js"></script>
 </head>
 <body>
-<div class="container-fluid main">
-  <div class="row">
-    <div class="col-8">
+<div class="container">
+  <div class="row main">
+    <div class="col-12 col-lg-8 d-flex flex-column">
      <div class="row header-container">
-       <div class="col title-container">
+       <div class="col-sm title-container">
         <h2>COVID-19 Tracker</h2>
        </div>
-       <div class="col search-container">
+       <div class="col-sm search-container">
         <div class="ui fluid search selection dropdown">
           <input type="hidden" name="country">
           <i class="dropdown icon"></i>
-          <div class="default text">Select Country</div>
+          <div class="default text">Seleccionar País</div>
           <div class="menu">
           
         </div>
@@ -37,8 +37,8 @@
        </div>
      </div>
      <div class="row stats-container">
-      <div class="col">
-        <div class="card cases" onclick="changeDataSelection('cases')">
+      <div class="col-12 col-sm-4 mb-3 mb-sm-0">
+        <div class="card cases active" onclick="changeDataSelection(this,'cases')">
           <div class="tab-selection"></div>
           <div class="card-body">
             <h6 class="card-title">Total de Casos</h6>
@@ -47,8 +47,8 @@
           </div>
         </div>
       </div>
-      <div class="col">
-        <div class="card recovered" onclick="changeDataSelection('recovered')">
+      <div class="col-12 col-sm-4 mb-3 mb-sm-0">
+        <div class="card recovered" onclick="changeDataSelection(this,'recovered')">
           <div class="tab-selection"></div>
           <div class="card-body">
             <h6 class="card-title">Reacuperados</h6>
@@ -57,8 +57,8 @@
           </div>
         </div>
       </div>
-      <div class="col">
-        <div class="card deaths" onclick="changeDataSelection('deaths')">
+      <div class="col-12 col-sm-4 mb-3 mb-sm-0">
+        <div class="card deaths" onclick="changeDataSelection(this,'deaths')">
           <div class="tab-selection"></div>
           <div class="card-body">
             <h6 class="card-title" >Muertes</h6>
@@ -68,7 +68,7 @@
         </div>
       </div>
     </div>
-    <div class="row map-container mt-3">
+    <div class="row map-container flex-grow-1 mt-3">
       <div class="col">
         <div id="map"></div>
       </div>
@@ -83,7 +83,7 @@
     </div> -->
     </div>
     
-    <div class="col-4 side-panel-container my-3">
+    <div class="col-12 col-lg-4 side-panel-container my-3">
       <div class="cases-table-container">
         <h4>Casos por país</h4>
         <div class="country-data">
@@ -94,7 +94,7 @@
           </table>
         </div>
       </div>
-      <div class="chart-container mt-3">
+      <div class="chart-container flex-grow-1 mt-3">
         <h4>Total de Casos Global</h4>
         <div class="linear-chart p-3">
           <canvas id="myChart"></canvas>
