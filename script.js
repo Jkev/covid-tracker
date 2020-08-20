@@ -166,7 +166,7 @@ const showDataOnMap = (data, casesType="cases") => {
             fillOpacity: 0.35,
             map: map,
             center: countryCenter,
-            radius: country[casesType] /2
+            radius: country[casesType] /4
           });
 
           mapCircles.push(countryCircle);
