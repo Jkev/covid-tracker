@@ -20,7 +20,7 @@ const worldwideSelection = {
     selected: true
 }
 var casesTypeColors = {
-    cases: '#1d2c4d',
+    cases: '#cc1034',
     active: '#9d80fe',
     recovered: '#7dd71d',
     deaths: '#fb4443'
